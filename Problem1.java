@@ -29,50 +29,58 @@ class Problem1 extends ConsoleProgram {
   }
   /* 
   Takes the username and seees if it follows the criteria by outputting true or false
-  * @param username sees if the username follows the criteria
+  * @param strusername sees if the username follows the criteria
   */
 
   public boolean validateUsername(String strusername) {
-    // Check if the username is null or empty
-    if (strusername == null || strusername.isEmpty()) {
-        return false;
-    }
+    int intNumberCount = 0;
+    int intLetterCount = 0;
+    int intOtherCount = 0;
 
-    // Check if the length is greater than 7 characters
-    if (strusername.length() <= 7) {
-        return false;
-    }
-    // Check if the username consists of only letters or digits
-    for (int i = 0; i < strusername.length(); i++) {
-      char character = strusername.charAt(i);
-      if (!Character.isLetterOrDigit(character)) {
-          return false;
+    for(int i = 0; i < strusername.length(); i++){
+      if(Character.isDigit(strusername.charAt(i))){
+        intNumberCount++;
+      }else if(Character.isLetter(strusername.charAt(i))){
+        intLetterCount++;
+      }else{
+        intOtherCount++;
       }
-
-    // Check if the username has at least one digit
-    boolean hasDigit = false;
-    for (int i = 0; i < strusername.length(); i++) {
-        char cha = strusername.charAt(i);
-        if (Character.isDigit(cha)) {
-            hasDigit = true;
-            break;
-        }
     }
 
-    return hasDigit;
+    if((intOtherCount == 0) && (intNumberCount > 1) && (strusername.length() > 7)){
+      return true;
+    }else{
+      return false;
+    }
   }
+
+  /* 
+   * It checkes if everything follows the criteria. After takes first name
+   * last name, and student number then breaks it up
+   * @param firstName takes the value inputted and sees the length and takes the first letter
+   * @param lastName take the value of the the last name takes the 4 characters and prints it out
+   * @param studentNumber takes 4 digetst and inputs it it
+  */
 
   public String createPassword(String firstName, String lastName, int studentNumber) {
-    String lastNamePrefiex = lastName.substring(0, Math.min(4, lastName.length())).toLowerCase();
+    String strName = "";
+    try{
+      if(firstName.length() == 0 || lastName.length() == 0 || Integer.toString(studentNumber).length() != 9){
+        throw new IllegalArgumentException();
+      }
 
-    char firstInitial = firstName.toUpperCase().charAt(0);
+      if(lastName.length() < 4){
+        strName += lastName.substring(0).toLowerCase();
+      }else{
+        strName += lastName.substring(0,4).toLowerCase();
+      }
 
-    String middleNumbers = studentNumber.substring(3, 6);
+      strName += firstName.substring(0,1).toUpperCase();
+      strName += Integer.toString(studentNumber).substring(3,6);
 
-    return lastNamePrefix + firstInitial + middleNumbers;
+      return strName;
+    }catch(IllegalArgumentException e){
+      return "";
+    }
   }
-}
-
-
-
 }
